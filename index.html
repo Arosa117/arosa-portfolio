@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Arosa · 自由摄影师作品集 — 风格灵活多变的人像 / 概念 / 合成 / 后期影像">
+  <title>Arosa · Photographer Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230b0b0b%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2236%22 text-anchor=%22middle%22 fill=%22%23fff%22 font-family=%22Georgia,serif%22%3EA%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============================================================
+     站点配置: 修改下面的 SITE_CONFIG 即可更换名字 / 文案 / 联系方式
+     (改完保存, 直接刷新浏览器即可; 作品列表由 build.py 自动生成)
+     ============================================================ -->
+<script>
+window.SITE_CONFIG = {
+  brandZh: 'Arosa',                 // 品牌名(导航/标题/页脚)
+  brandEn: 'PHOTOGRAPHER',          // 英文小标(品牌名旁)
+  heroEyebrow: 'PHOTOGRAPHER · 自由摄影师',
+  heroTitle1: 'Arosa',              // 首页大标题
+  heroTitle2: '',                    // 第二行大标题(可留空)
+  heroSub: '我是 Arosa, 自由摄影师。人像、概念、合成、后期——不拘一格, 只为把脑海里的画面, 变成值得别人去看见的作品。',
+  heroWork: '',                      // 留空即可(极简首页无背景主图); 填作品编号可保留扩展
+  // --- 关于 ---
+  aboutName: 'Arosa',
+  aboutRole: '自由摄影师 · 风格灵活多变',
+  // --- 联系方式(不填的项不会显示) ---
+  email: '3112811410@qq.com',
+  qq: '3112811410',                    // QQ
+  wechat: '',
+  phone: '',
+  xiaohongshu: '',
+  zcool: '',
+  weibo: '',
+};
+</script>
+
+<!-- ======================= 顶部导航 ======================= -->
+<header class="site-nav">
+  <div class="nav-inner">
+    <a class="brand" href="#home">
+      <span class="zh">Arosa</span>
+      <span class="en">PHOTOGRAPHER</span>
+    </a>
+    <button class="nav-burger" aria-label="打开菜单"><span></span><span></span><span></span></button>
+    <ul class="nav-links">
+      <li><a href="#home">首页</a></li>
+      <li><a href="#works">作品</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a class="cta" href="#contact">联系</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <!-- ======================= 首页(极简文字排版) ======================= -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <p class="kicker eyebrow reveal"><span class="t">PHOTOGRAPHER · 自由摄影师</span></p>
+      <h1 class="reveal d1"><span class="l1">Arosa</span><span class="l2 thin"></span></h1>
+      <p class="sub reveal d2">我是 Arosa, 一名自由摄影师。人像、概念、合成、后期——不拘一格, 只为把脑海里的画面, 变成值得别人去看见的作品。</p>
+      <p class="hero-tags reveal d2">人像摄影 / 概念合成 / 商业拍摄 / 后期精修</p>
+      <div class="stats reveal d3">
+        <div class="stat"><b><span id="work-count">0</span></b><span>幅精选作品</span></div>
+        <div class="stat"><b><span id="range-years">—</span></b><span>创作时间跨度</span></div>
+        <div class="stat"><b>不设限</b><span>拍摄风格</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 作品集 ======================= -->
+  <section class="section" id="works">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <div>
+          <p class="kicker">SELECTED WORKS</p>
+          <h2>作品集</h2>
+        </div>
+        <p class="note">共 <span class="work-total">0</span> 幅 · 点击任意作品查看大图<br>网页展示为优化版, 原图保存在本地</p>
+      </header>
+      <div class="gallery" id="gallery"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 关于 ======================= -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="about-left">
+          <div class="sticky">
+            <p class="kicker reveal">ABOUT</p>
+            <div class="about-quote reveal d1">“<span class="mark">总有一天会燃烧殆尽</span>。”</div>
+            <p class="about-role" style="color:#9a9a95;letter-spacing:.3em;font-size:12px;margin-top:20px"></p>
+          </div>
+        </div>
+        <div class="about-body">
+          <!-- 下面两段是示例文案, 请替换成你自己的介绍 -->
+          <p class="reveal">你好, 我是 <b class="about-name-inline">Arosa</b>。一名自由摄影师, 也是一个不太愿意被单一风格定义的人——摄影的乐趣, 正在于它的「灵活」：可以是一张干净利落的商业人像, 也可以是天马行空的概念合成。</p>
+          <p class="reveal d1">我偏爱有电影感的光影, 也享受在后期里把画面一点点推向极致。每一次按下快门, 都是在尝试把脑海里的想象变成现实。</p>
+          <div class="services reveal d2">
+            <span>人像摄影</span><span>概念合成</span><span>商业拍摄</span><span>后期精修</span><span>色彩调校</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= 联系 ======================= -->
+  <section class="section" id="contact">
+    <div class="wrap">
+      <div class="contact-grid">
+        <div class="contact-head reveal">
+          <p class="kicker">CONTACT</p>
+          <h2>一起拍点<br>不一样的</h2>
+          <p>无论你想拍一组干净的人像, 还是想完成一张天马行空的合成, 都可以从这里找到我。</p>
+        </div>
+        <div class="reveal d1">
+          <ul class="contact-list" id="contact-list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================= 页脚 ======================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">Arosa<small>PHOTOGRAPHER · PORTFOLIO</small></div>
+      <div class="foot-links">
+        <a href="#works">作品</a>
+        <a href="#about">关于</a>
+        <a href="#contact">联系</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year">2026</span> Arosa · 保留所有权利</span>
+      <span class="mono">共 <span class="foot-count">0</span> 幅作品 · 由 build.py 自动生成</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================= 灯箱 ======================= -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="作品大图查看">
+  <button class="lb-close" id="lb-close" aria-label="关闭"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <button class="lb-prev" id="lb-prev" aria-label="上一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lb-next" id="lb-next" aria-label="下一张"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5l7 7-7 7"/></svg></button>
+  <div class="lb-stage">
+    <div class="lb-loading" id="lb-loading">LOADING…</div>
+    <img class="lb-img" id="lb-img" alt="">
+  </div>
+  <div class="lb-bar">
+    <div class="lb-info">
+      <h4 id="lb-title"></h4>
+      <div class="meta" id="lb-meta"></div>
+    </div>
+    <div class="lb-actions">
+      <a class="lb-btn primary" id="lb-orig" download><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg><span class="lbl">下载原图</span></a>
+    </div>
+  </div>
+</div>
+
+<noscript><p style="padding:120px 20px;text-align:center;color:#555">本站需要启用 JavaScript 才能浏览作品。</p></noscript>
+<script src="assets/js/works-data.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
