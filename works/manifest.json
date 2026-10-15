@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-05 23:20:59",
-  "count": 13,
+  "generatedAt": "2026-10-15 15:41:33",
+  "count": 14,
   "works": [
     {
       "ok": true,
@@ -95,6 +95,21 @@
     {
       "ok": true,
       "idx": 7,
+      "id": "0c473e",
+      "title": "合成7",
+      "file": "合成7.jpg",
+      "web": "works/web/0c473e.webp",
+      "thumb": "works/thumb/0c473e.webp",
+      "w": 5120,
+      "h": 3413,
+      "ratio": 1.5,
+      "orientation": "landscape",
+      "mb": 8.7,
+      "mtime": "2026-10-11"
+    },
+    {
+      "ok": true,
+      "idx": 8,
       "id": "532031",
       "title": "外景1",
       "file": "外景1.jpg",
@@ -109,7 +124,7 @@
     },
     {
       "ok": true,
-      "idx": 8,
+      "idx": 9,
       "id": "41de5e",
       "title": "外景2",
       "file": "外景2.jpg",
@@ -124,7 +139,7 @@
     },
     {
       "ok": true,
-      "idx": 9,
+      "idx": 10,
       "id": "5208ef",
       "title": "外景3",
       "file": "外景3.jpg",
@@ -139,7 +154,7 @@
     },
     {
       "ok": true,
-      "idx": 10,
+      "idx": 11,
       "id": "1d250a",
       "title": "外景4",
       "file": "外景4.jpg",
@@ -154,7 +169,7 @@
     },
     {
       "ok": true,
-      "idx": 11,
+      "idx": 12,
       "id": "2cdb26",
       "title": "外景5",
       "file": "外景5.jpg",
@@ -169,7 +184,7 @@
     },
     {
       "ok": true,
-      "idx": 12,
+      "idx": 13,
       "id": "3fef05",
       "title": "外景6",
       "file": "外景6.png",
@@ -184,7 +199,7 @@
     },
     {
       "ok": true,
-      "idx": 13,
+      "idx": 14,
       "id": "181ab9",
       "title": "外景7",
       "file": "外景7.jpg",
