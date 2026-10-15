@@ -260,23 +260,23 @@ if (list) {
 var ORDER_SERVICES = SITE.orderServices || [
   {
     name: '约拍 / 陪拍 / 外景正片', price: 120, priceText: '120', priceSuffix: 'r/h',
-    unit: '小时', min: 2, deposit: 30, tag: '2 小时起拍 · 定金 30r',
-    notes: ['2 小时起拍, 定金 30r', '跑单、迟到超 30 分钟不退', '10 公里以内免交通费用, 超出需另付', '返图时间在 7 天以内']
+    unit: '小时', min: 2, depositRate: 0.3, tag: '2 小时起拍 · 定金 30%',
+    notes: ['2 小时起拍, 定金为全款 30%', '跑单、迟到超 30 分钟不退', '10 公里以内免交通费用, 超出需另付', '返图时间在 7 天以内']
   },
   {
     name: '漫展场照', price: 20, priceText: '20', priceSuffix: 'r/张',
-    unit: '张', min: 4, deposit: 15, tag: '四张起拍 · 定金 15r',
-    notes: ['四张起拍, 定金 15r', '跑单、迟到超 30 分钟不退', '可提供动作指导, 需自备动作', '后期只做调色、轻微磨皮 · 返图 14 天内']
+    unit: '张', min: 4, depositRate: 0.3, tag: '四张起拍 · 定金 30%',
+    notes: ['四张起拍, 定金为全款 30%', '跑单、迟到超 30 分钟不退', '可提供动作指导, 需自备动作', '后期只做调色、轻微磨皮 · 返图 14 天内']
   },
   {
     name: '半合成场照', price: 50, priceText: '50', priceSuffix: 'r/张',
-    unit: '张', min: 1, deposit: 0, tag: '指定特效额外收费',
-    notes: ['指定特效额外收费']
+    unit: '张', min: 1, depositRate: 0.3, tag: '定金 30% · 指定特效额外收费',
+    notes: ['定金为全款 30%', '指定特效额外收费']
   },
   {
     name: '全合成场照', price: 100, priceText: '100', priceSuffix: 'r/张',
-    unit: '张', min: 1, deposit: 0, tag: '指定特效额外收费',
-    notes: ['指定特效额外收费']
+    unit: '张', min: 1, depositRate: 0.3, tag: '定金 30% · 指定特效额外收费',
+    notes: ['定金为全款 30%', '指定特效额外收费']
   }
 ];
 var ORDER_DEADLINES = SITE.orderDeadlines || ['尽快安排', '一周内', '两周内', '本月内', '时间待定'];
@@ -357,14 +357,19 @@ if (ofForm) {
     if (qty < min) qty = min;
     if (qty > 999) qty = 999;
     var price = svc.price || 0;
+    var sub = price * qty;
+    var rate = (typeof svc.depositRate === 'number') ? svc.depositRate : 0;
+    var deposit = Math.round(sub * rate);
     return {
       service: svc.name || '',
       unit: svc.unit || '张',
       priceText: (svc.priceText || '0') + (svc.priceSuffix || ''),
       min: min,
-      deposit: svc.deposit || 0,
+      depositRate: rate,
+      deposit: deposit,
+      balance: sub - deposit,
       qty: qty,
-      sub: price * qty,
+      sub: sub,
       deadline: ofDeadline.value || ORDER_DEADLINES[0],
       brief: (ofBrief.value || '').trim(),
       name: (ofName.value || '').trim(),
@@ -379,7 +384,8 @@ if (ofForm) {
       '数量：' + d.qty + ' ' + d.unit,
       '单价：' + d.priceText,
       '小计：' + d.sub + 'r',
-      d.deposit ? '定金：' + d.deposit + 'r (需预付)' : '定金：无',
+      '定金：' + d.deposit + 'r (全款 ' + Math.round(d.depositRate * 100) + '%, 需预付)',
+      '尾款：' + d.balance + 'r',
       '期望档期：' + d.deadline,
       '画面需求：' + (d.brief || '(未填写)'),
       '称呼：' + (d.name || '(未填写)'),
@@ -398,7 +404,8 @@ if (ofForm) {
       row('数量', d.qty + ' ' + d.unit) +
       row('单价', d.priceText) +
       row('小计', d.sub + 'r') +
-      (d.deposit ? row('定金', d.deposit + 'r（需预付）') : '') +
+      row('定金', d.deposit + 'r（' + Math.round(d.depositRate * 100) + '%, 需预付）') +
+      row('尾款', d.balance + 'r') +
       row('期望档期', d.deadline) +
       row('画面需求', d.brief || '待填写') +
       row('称呼', d.name || '待填写') +
