@@ -121,8 +121,11 @@ window.SITE_CONFIG = {
           <p class="kicker">ORDER / 约稿</p>
           <h2>点单下单</h2>
         </div>
-        <p class="note">选好需求 → 生成订单 → 发给我<br>我会尽快回复档期与报价</p>
+        <p class="note">价格透明 · 选好需求生成订单<br>发我确认档期与定金</p>
       </header>
+
+      <div class="price-list reveal" id="price-list"></div>
+      <p class="price-gear reveal" id="price-gear"></p>
 
       <div class="order-grid">
         <form class="order-form reveal" id="order-form" novalidate>
@@ -135,16 +138,12 @@ window.SITE_CONFIG = {
             <legend class="of-label">02 / 数量与档期</legend>
             <div class="of-row">
               <label class="of-field">
-                <span>张数</span>
-                <input type="number" id="of-qty" min="1" max="99" step="1" value="1" inputmode="numeric">
+                <span id="of-qty-label">数量</span>
+                <input type="number" id="of-qty" min="1" max="999" step="1" value="2" inputmode="numeric">
               </label>
               <label class="of-field">
-                <span>期望交付</span>
+                <span>期望档期</span>
                 <select id="of-deadline"></select>
-              </label>
-              <label class="of-field">
-                <span>预算</span>
-                <select id="of-budget"></select>
               </label>
             </div>
           </fieldset>
@@ -153,7 +152,7 @@ window.SITE_CONFIG = {
             <legend class="of-label">03 / 画面需求</legend>
             <label class="of-field">
               <span>想拍什么 / 参考说明</span>
-              <textarea id="of-brief" rows="5" placeholder="角色 / 场景 / 风格 / 参考图链接…都可以写在这里"></textarea>
+              <textarea id="of-brief" rows="5" placeholder="角色 / 场景 / 风格 / 指定特效 / 参考图链接…都可以写在这里"></textarea>
             </label>
           </fieldset>
 

@@ -258,13 +258,29 @@ if (list) {
 
 /* ---------- 约稿下单 ---------- */
 var ORDER_SERVICES = SITE.orderServices || [
-  { name: '概念合成', desc: '从零构建场景与光影', price: '' },
-  { name: '外景写真', desc: '实景拍摄 · 氛围调色', price: '' },
-  { name: '人像精修', desc: '皮肤 · 光影 · 质感', price: '' },
-  { name: '商业合作', desc: '品牌 / 产品 / 宣传', price: '' }
+  {
+    name: '约拍 / 陪拍 / 外景正片', price: 120, priceText: '120', priceSuffix: 'r/h',
+    unit: '小时', min: 2, deposit: 30, tag: '2 小时起拍 · 定金 30r',
+    notes: ['2 小时起拍, 定金 30r', '跑单、迟到超 30 分钟不退', '10 公里以内免交通费用, 超出需另付', '返图时间在 7 天以内']
+  },
+  {
+    name: '漫展场照', price: 20, priceText: '20', priceSuffix: 'r/张',
+    unit: '张', min: 4, deposit: 15, tag: '四张起拍 · 定金 15r',
+    notes: ['四张起拍, 定金 15r', '跑单、迟到超 30 分钟不退', '可提供动作指导, 需自备动作', '后期只做调色、轻微磨皮 · 返图 14 天内']
+  },
+  {
+    name: '半合成场照', price: 50, priceText: '50', priceSuffix: 'r/张',
+    unit: '张', min: 1, deposit: 0, tag: '指定特效额外收费',
+    notes: ['指定特效额外收费']
+  },
+  {
+    name: '全合成场照', price: 100, priceText: '100', priceSuffix: 'r/张',
+    unit: '张', min: 1, deposit: 0, tag: '指定特效额外收费',
+    notes: ['指定特效额外收费']
+  }
 ];
-var ORDER_DEADLINES = SITE.orderDeadlines || ['3 天内(加急)', '1 周内', '2 周内', '时间不限'];
-var ORDER_BUDGETS = SITE.orderBudgets || ['面议', '500 元以内', '500 - 1000 元', '1000 - 3000 元', '3000 元以上'];
+var ORDER_DEADLINES = SITE.orderDeadlines || ['尽快安排', '一周内', '两周内', '本月内', '时间待定'];
+var ORDER_GEAR = SITE.orderGear || '佳能 R6 + 腾龙 a007 24-70mm f2.8 · 佳能原厂 50mm f1.8 三代 · 神牛 V850 三代 x1 / V860 三代 x2';
 var ORDER_EMAIL = SITE.orderEmail || SITE.email || '';
 var ORDER_QQ = SITE.orderQQ || SITE.qq || '';
 
@@ -272,8 +288,8 @@ var ofForm = $('#order-form');
 if (ofForm) {
   var ofServicesEl = $('#of-services');
   var ofQty = $('#of-qty');
+  var ofQtyLabel = $('#of-qty-label');
   var ofDeadline = $('#of-deadline');
-  var ofBudget = $('#of-budget');
   var ofBrief = $('#of-brief');
   var ofName = $('#of-name');
   var ofContact = $('#of-contact');
@@ -284,6 +300,8 @@ if (ofForm) {
   var ofCopy = $('#of-copy');
   var ofMail = $('#of-mail');
   var ofQQ = $('#of-qq');
+  var ofPriceList = $('#price-list');
+  var ofGear = $('#price-gear');
   var generated = false;
 
   ORDER_DEADLINES.forEach(function(t){
@@ -291,33 +309,63 @@ if (ofForm) {
     o.value = t; o.textContent = t;
     ofDeadline.appendChild(o);
   });
-  ORDER_BUDGETS.forEach(function(t){
-    var o = document.createElement('option');
-    o.value = t; o.textContent = t;
-    ofBudget.appendChild(o);
-  });
+
+  if (ofPriceList) {
+    var plHtml = [];
+    ORDER_SERVICES.forEach(function(s){
+      var notes = (s.notes || []).map(function(n){ return '<span>' + esc(n) + '</span>'; }).join('');
+      plHtml.push(
+        '<div class="pl-row">' +
+          '<div class="pl-main">' +
+            '<div class="pl-name">' + esc(s.name) + '</div>' +
+            '<div class="pl-notes">' + notes + '</div>' +
+          '</div>' +
+          '<div class="pl-price"><b>' + esc(s.priceText) + '</b><i>' + esc(s.priceSuffix) + '</i></div>' +
+        '</div>'
+      );
+    });
+    ofPriceList.innerHTML = plHtml.join('');
+  }
+  if (ofGear) ofGear.textContent = '设备 · ' + ORDER_GEAR;
 
   ORDER_SERVICES.forEach(function(s, i){
     var label = document.createElement('label');
     label.className = 'of-service' + (i === 0 ? ' is-on' : '');
     label.innerHTML = '<input type="radio" name="of-service" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
       '<span class="s-name">' + esc(s.name) + '</span>' +
-      (s.desc ? '<span class="s-desc">' + esc(s.desc) + '</span>' : '') +
-      (s.price ? '<span class="s-price">' + esc(s.price) + '</span>' : '');
+      (s.tag ? '<span class="s-desc">' + esc(s.tag) + '</span>' : '') +
+      '<span class="s-price">' + esc(s.priceText + s.priceSuffix) + '</span>';
     ofServicesEl.appendChild(label);
   });
+
+  function syncServiceUI() {
+    var svc = ORDER_SERVICES[currentServiceIndex()] || ORDER_SERVICES[0] || {};
+    var min = svc.min || 1;
+    if (ofQtyLabel) ofQtyLabel.textContent = (svc.unit === '小时') ? '时长（小时）' : '张数';
+    ofQty.min = min;
+    if ((parseInt(ofQty.value, 10) || 0) < min) ofQty.value = min;
+  }
 
   function currentServiceIndex() {
     var el = ofForm.querySelector('input[name="of-service"]:checked');
     return el ? parseInt(el.value, 10) : 0;
   }
   function orderData() {
-    var svc = ORDER_SERVICES[currentServiceIndex()] || ORDER_SERVICES[0] || { name: '' };
+    var svc = ORDER_SERVICES[currentServiceIndex()] || ORDER_SERVICES[0] || {};
+    var min = svc.min || 1;
+    var qty = parseInt(ofQty.value, 10) || min;
+    if (qty < min) qty = min;
+    if (qty > 999) qty = 999;
+    var price = svc.price || 0;
     return {
-      service: svc.name,
-      qty: Math.max(1, Math.min(99, parseInt(ofQty.value, 10) || 1)),
+      service: svc.name || '',
+      unit: svc.unit || '张',
+      priceText: (svc.priceText || '0') + (svc.priceSuffix || ''),
+      min: min,
+      deposit: svc.deposit || 0,
+      qty: qty,
+      sub: price * qty,
       deadline: ofDeadline.value || ORDER_DEADLINES[0],
-      budget: ofBudget.value || ORDER_BUDGETS[0],
       brief: (ofBrief.value || '').trim(),
       name: (ofName.value || '').trim(),
       contact: (ofContact.value || '').trim()
@@ -328,9 +376,11 @@ if (ofForm) {
     var lines = [
       '【约稿订单】',
       '服务：' + d.service,
-      '数量：' + d.qty + ' 张',
-      '期望交付：' + d.deadline,
-      '预算：' + d.budget,
+      '数量：' + d.qty + ' ' + d.unit,
+      '单价：' + d.priceText,
+      '小计：' + d.sub + 'r',
+      d.deposit ? '定金：' + d.deposit + 'r (需预付)' : '定金：无',
+      '期望档期：' + d.deadline,
       '画面需求：' + (d.brief || '(未填写)'),
       '称呼：' + (d.name || '(未填写)'),
       '联系方式：' + (d.contact || '(未填写)'),
@@ -345,12 +395,15 @@ if (ofForm) {
     var d = orderData();
     ocBody.innerHTML =
       row('服务', d.service) +
-      row('数量', d.qty + ' 张') +
-      row('期望交付', d.deadline) +
-      row('预算', d.budget) +
+      row('数量', d.qty + ' ' + d.unit) +
+      row('单价', d.priceText) +
+      row('小计', d.sub + 'r') +
+      (d.deposit ? row('定金', d.deposit + 'r（需预付）') : '') +
+      row('期望档期', d.deadline) +
       row('画面需求', d.brief || '待填写') +
       row('称呼', d.name || '待填写') +
-      row('联系方式', d.contact || '待填写');
+      row('联系方式', d.contact || '待填写') +
+      '<div class="oc-total"><span>合计</span><b>' + d.sub + '<i>r</i></b></div>';
     if (generated) refreshActions();
   }
   function refreshActions() {
@@ -400,6 +453,7 @@ if (ofForm) {
     $all('.of-service', ofServicesEl).forEach(function(el){
       el.classList.toggle('is-on', $('input', el).checked);
     });
+    syncServiceUI();
     renderOrder();
   });
   ['input', 'change'].forEach(function(evt){
@@ -420,10 +474,11 @@ if (ofForm) {
       (d.name ? ofContact : ofName).focus();
       return;
     }
+    var depositTxt = d.deposit ? '（定金 ' + d.deposit + 'r 需预付）' : '';
     if (!d.brief) {
-      ofMsg.textContent = '已生成订单(未填画面需求, 也可以直接发送)。';
+      ofMsg.textContent = '订单已生成' + depositTxt + ', 未填画面需求也可以直接发送。';
     } else {
-      ofMsg.textContent = '订单已生成, 选择下面的方式发给我即可。';
+      ofMsg.textContent = '订单已生成' + depositTxt + ', 选择下面的方式发给我即可。';
     }
     generated = true;
     refreshActions();
@@ -441,14 +496,15 @@ if (ofForm) {
       ofServicesEl.querySelectorAll('.of-service').forEach(function(el, i){
         el.classList.toggle('is-on', i === 0);
       });
-      ofQty.value = 1;
       ofDeadline.selectedIndex = 0;
-      ofBudget.selectedIndex = 0;
+      ofQty.value = (ORDER_SERVICES[0] && ORDER_SERVICES[0].min) || 1;
+      syncServiceUI();
       renderOrder();
     }, 0);
   });
 
   ocHint.textContent = SITE.orderNote || '本站为作品展示页, 生成订单后通过邮件或 QQ 发给我, 我会尽快回复档期与报价。';
+  syncServiceUI();
   renderOrder();
 }
 
