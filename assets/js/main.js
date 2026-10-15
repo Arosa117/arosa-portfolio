@@ -256,6 +256,202 @@ if (list) {
   }
 }
 
+/* ---------- 约稿下单 ---------- */
+var ORDER_SERVICES = SITE.orderServices || [
+  { name: '概念合成', desc: '从零构建场景与光影', price: '' },
+  { name: '外景写真', desc: '实景拍摄 · 氛围调色', price: '' },
+  { name: '人像精修', desc: '皮肤 · 光影 · 质感', price: '' },
+  { name: '商业合作', desc: '品牌 / 产品 / 宣传', price: '' }
+];
+var ORDER_DEADLINES = SITE.orderDeadlines || ['3 天内(加急)', '1 周内', '2 周内', '时间不限'];
+var ORDER_BUDGETS = SITE.orderBudgets || ['面议', '500 元以内', '500 - 1000 元', '1000 - 3000 元', '3000 元以上'];
+var ORDER_EMAIL = SITE.orderEmail || SITE.email || '';
+var ORDER_QQ = SITE.orderQQ || SITE.qq || '';
+
+var ofForm = $('#order-form');
+if (ofForm) {
+  var ofServicesEl = $('#of-services');
+  var ofQty = $('#of-qty');
+  var ofDeadline = $('#of-deadline');
+  var ofBudget = $('#of-budget');
+  var ofBrief = $('#of-brief');
+  var ofName = $('#of-name');
+  var ofContact = $('#of-contact');
+  var ofMsg = $('#of-msg');
+  var ocBody = $('#oc-body');
+  var ocActions = $('#oc-actions');
+  var ocHint = $('#oc-hint');
+  var ofCopy = $('#of-copy');
+  var ofMail = $('#of-mail');
+  var ofQQ = $('#of-qq');
+  var generated = false;
+
+  ORDER_DEADLINES.forEach(function(t){
+    var o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    ofDeadline.appendChild(o);
+  });
+  ORDER_BUDGETS.forEach(function(t){
+    var o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    ofBudget.appendChild(o);
+  });
+
+  ORDER_SERVICES.forEach(function(s, i){
+    var label = document.createElement('label');
+    label.className = 'of-service' + (i === 0 ? ' is-on' : '');
+    label.innerHTML = '<input type="radio" name="of-service" value="' + i + '"' + (i === 0 ? ' checked' : '') + '>' +
+      '<span class="s-name">' + esc(s.name) + '</span>' +
+      (s.desc ? '<span class="s-desc">' + esc(s.desc) + '</span>' : '') +
+      (s.price ? '<span class="s-price">' + esc(s.price) + '</span>' : '');
+    ofServicesEl.appendChild(label);
+  });
+
+  function currentServiceIndex() {
+    var el = ofForm.querySelector('input[name="of-service"]:checked');
+    return el ? parseInt(el.value, 10) : 0;
+  }
+  function orderData() {
+    var svc = ORDER_SERVICES[currentServiceIndex()] || ORDER_SERVICES[0] || { name: '' };
+    return {
+      service: svc.name,
+      qty: Math.max(1, Math.min(99, parseInt(ofQty.value, 10) || 1)),
+      deadline: ofDeadline.value || ORDER_DEADLINES[0],
+      budget: ofBudget.value || ORDER_BUDGETS[0],
+      brief: (ofBrief.value || '').trim(),
+      name: (ofName.value || '').trim(),
+      contact: (ofContact.value || '').trim()
+    };
+  }
+  function orderText() {
+    var d = orderData();
+    var lines = [
+      '【约稿订单】',
+      '服务：' + d.service,
+      '数量：' + d.qty + ' 张',
+      '期望交付：' + d.deadline,
+      '预算：' + d.budget,
+      '画面需求：' + (d.brief || '(未填写)'),
+      '称呼：' + (d.name || '(未填写)'),
+      '联系方式：' + (d.contact || '(未填写)'),
+      '—— 来自 Arosa 作品集网站'
+    ];
+    return lines.join('\n');
+  }
+  function row(k, v) {
+    return '<div class="oc-row"><span class="k">' + esc(k) + '</span><span class="v">' + esc(v || '—') + '</span></div>';
+  }
+  function renderOrder() {
+    var d = orderData();
+    ocBody.innerHTML =
+      row('服务', d.service) +
+      row('数量', d.qty + ' 张') +
+      row('期望交付', d.deadline) +
+      row('预算', d.budget) +
+      row('画面需求', d.brief || '待填写') +
+      row('称呼', d.name || '待填写') +
+      row('联系方式', d.contact || '待填写');
+    if (generated) refreshActions();
+  }
+  function refreshActions() {
+    var d = orderData();
+    var text = orderText();
+    if (ofMail) {
+      if (ORDER_EMAIL) {
+        ofMail.hidden = false;
+        ofMail.onclick = function(){
+          var subject = '约稿订单 · ' + d.service + ' · ' + d.qty + ' 张';
+          window.location.href = 'mailto:' + encodeURIComponent(ORDER_EMAIL) +
+            '?subject=' + encodeURIComponent(subject) +
+            '&body=' + encodeURIComponent(text);
+        };
+      } else { ofMail.hidden = true; }
+    }
+    if (ofQQ) {
+      if (ORDER_QQ) {
+        ofQQ.hidden = false;
+        ofQQ.href = 'https://wpa.qq.com/msgrd?v=3&uin=' + encodeURIComponent(ORDER_QQ) + '&site=qq&menu=yes';
+      } else { ofQQ.hidden = true; }
+    }
+    if (ofCopy) {
+      ofCopy.onclick = function(){
+        var t = orderText();
+        var done = function(){ ofMsg.textContent = '订单信息已复制, 粘贴到 QQ / 微信发给我即可。'; };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(t).then(done, function(){ legacyCopy(t); done(); });
+        } else { legacyCopy(t); done(); }
+      };
+    }
+  }
+  function legacyCopy(t) {
+    var ta = document.createElement('textarea');
+    ta.value = t;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  ofServicesEl.addEventListener('change', function(e){
+    if (!e.target || e.target.name !== 'of-service') return;
+    $all('.of-service', ofServicesEl).forEach(function(el){
+      el.classList.toggle('is-on', $('input', el).checked);
+    });
+    renderOrder();
+  });
+  ['input', 'change'].forEach(function(evt){
+    ofForm.addEventListener(evt, function(e){
+      if (e.target && e.target.name === 'of-service') return;
+      renderOrder();
+    });
+  });
+  ofBrief.addEventListener('input', renderOrder);
+
+  ofForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var d = orderData();
+    if (!d.name || !d.contact) {
+      ofMsg.textContent = '请先填写「称呼」和「联系方式」, 方便我回复你。';
+      generated = false;
+      ocActions.hidden = true;
+      (d.name ? ofContact : ofName).focus();
+      return;
+    }
+    if (!d.brief) {
+      ofMsg.textContent = '已生成订单(未填画面需求, 也可以直接发送)。';
+    } else {
+      ofMsg.textContent = '订单已生成, 选择下面的方式发给我即可。';
+    }
+    generated = true;
+    refreshActions();
+    ocActions.hidden = false;
+    renderOrder();
+    if (!ocHint.dataset.done) {
+      ocHint.dataset.done = '1';
+    }
+  });
+  ofForm.addEventListener('reset', function(){
+    generated = false;
+    ocActions.hidden = true;
+    ofMsg.textContent = '';
+    window.setTimeout(function(){
+      ofServicesEl.querySelectorAll('.of-service').forEach(function(el, i){
+        el.classList.toggle('is-on', i === 0);
+      });
+      ofQty.value = 1;
+      ofDeadline.selectedIndex = 0;
+      ofBudget.selectedIndex = 0;
+      renderOrder();
+    }, 0);
+  });
+
+  ocHint.textContent = SITE.orderNote || '本站为作品展示页, 生成订单后通过邮件或 QQ 发给我, 我会尽快回复档期与报价。';
+  renderOrder();
+}
+
 /* ---------- Hero 主图: 优先 SITE.heroWork, 否则第一张 ---------- */
 function pickHero(){
   var target = SITE.heroWork;

@@ -35,6 +35,10 @@ window.SITE_CONFIG = {
   xiaohongshu: '',
   zcool: '',
   weibo: '',
+  // --- 约稿下单 ---
+  orderEmail: '',                     // 留空则用上面的 email
+  orderQQ: '',                        // 留空则用上面的 qq
+  orderNote: '本站为作品展示页, 生成订单后通过邮件或 QQ 发给我, 我会尽快回复档期与报价。',
 };
 </script>
 
@@ -50,7 +54,8 @@ window.SITE_CONFIG = {
       <li><a href="#home">首页</a></li>
       <li><a href="#works">作品</a></li>
       <li><a href="#about">关于</a></li>
-      <li><a class="cta" href="#contact">联系</a></li>
+      <li><a href="#contact">联系</a></li>
+      <li><a class="cta" href="#order">约稿下单</a></li>
     </ul>
   </div>
 </header>
@@ -108,6 +113,87 @@ window.SITE_CONFIG = {
     </div>
   </section>
 
+  <!-- ======================= 约稿下单 ======================= -->
+  <section class="section" id="order">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <div>
+          <p class="kicker">ORDER / 约稿</p>
+          <h2>点单下单</h2>
+        </div>
+        <p class="note">选好需求 → 生成订单 → 发给我<br>我会尽快回复档期与报价</p>
+      </header>
+
+      <div class="order-grid">
+        <form class="order-form reveal" id="order-form" novalidate>
+          <fieldset class="of-block">
+            <legend class="of-label">01 / 选择服务</legend>
+            <div class="of-services" id="of-services"></div>
+          </fieldset>
+
+          <fieldset class="of-block">
+            <legend class="of-label">02 / 数量与档期</legend>
+            <div class="of-row">
+              <label class="of-field">
+                <span>张数</span>
+                <input type="number" id="of-qty" min="1" max="99" step="1" value="1" inputmode="numeric">
+              </label>
+              <label class="of-field">
+                <span>期望交付</span>
+                <select id="of-deadline"></select>
+              </label>
+              <label class="of-field">
+                <span>预算</span>
+                <select id="of-budget"></select>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="of-block">
+            <legend class="of-label">03 / 画面需求</legend>
+            <label class="of-field">
+              <span>想拍什么 / 参考说明</span>
+              <textarea id="of-brief" rows="5" placeholder="角色 / 场景 / 风格 / 参考图链接…都可以写在这里"></textarea>
+            </label>
+          </fieldset>
+
+          <fieldset class="of-block">
+            <legend class="of-label">04 / 联系方式</legend>
+            <div class="of-row of-row-2">
+              <label class="of-field">
+                <span>称呼</span>
+                <input type="text" id="of-name" placeholder="怎么称呼你" autocomplete="name">
+              </label>
+              <label class="of-field">
+                <span>QQ / 微信 / 邮箱</span>
+                <input type="text" id="of-contact" placeholder="方便联系你的方式" autocomplete="email">
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="of-actions">
+            <button type="submit" class="btn btn-primary" id="of-submit">生成订单</button>
+            <button type="reset" class="btn btn-ghost" id="of-reset">清空重填</button>
+          </div>
+          <p class="of-msg" id="of-msg" role="status" aria-live="polite"></p>
+        </form>
+
+        <aside class="order-side reveal d1">
+          <div class="order-card">
+            <p class="oc-label">YOUR ORDER / 订单预览</p>
+            <div class="oc-body" id="oc-body"></div>
+            <div class="oc-actions" id="oc-actions" hidden>
+              <button type="button" class="btn btn-primary" id="of-copy">复制订单信息</button>
+              <button type="button" class="btn btn-ghost" id="of-mail">邮件发送</button>
+              <a class="btn btn-ghost" id="of-qq" target="_blank" rel="noopener">QQ 联系</a>
+            </div>
+            <p class="oc-hint" id="oc-hint"></p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
   <!-- ======================= 联系 ======================= -->
   <section class="section" id="contact">
     <div class="wrap">
@@ -133,6 +219,7 @@ window.SITE_CONFIG = {
       <div class="foot-links">
         <a href="#works">作品</a>
         <a href="#about">关于</a>
+        <a href="#order">约稿</a>
         <a href="#contact">联系</a>
       </div>
     </div>
