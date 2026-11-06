@@ -90,6 +90,8 @@ $all('.work-total').forEach(function(el){ el.textContent = WORKS.length; });
 var gallery = $('#gallery');
 if (!gallery || !WORKS.length) {
   if (gallery) gallery.innerHTML = '<p style="color:#6b665f;padding:40px 0">暂无作品。请把图片放进本文件夹后运行 python build.py 生成。</p>';
+} else if (window.renderMasonryGallery) {
+  window.renderMasonryGallery(gallery, WORKS, function(index){ openLightbox(index); });
 } else {
   var html = [];
   WORKS.forEach(function(w, i){
@@ -187,6 +189,7 @@ function loadLightbox(i){
   if (i >= WORKS.length) i = 0;
   cur = i;
   var w = WORKS[i];
+  if (lbTitle) lbTitle.textContent = w.title || ('作品 ' + pad2(i + 1));
   lbImg.classList.remove('ready');
   lbLoading.style.display = 'grid';
   lbImg.onload = function(){ lbImg.classList.add('ready'); lbLoading.style.display = 'none'; };
@@ -199,6 +202,7 @@ function loadLightbox(i){
   var noEl = $('#lb-no'); if (noEl) noEl.textContent = pad2(i + 1);
 }
 function openLightbox(i){ loadLightbox(i); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+window.openLightbox = openLightbox;
 function closeLightbox(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
 function step(d){ if (cur >= 0) loadLightbox(cur + d); }
 
@@ -259,24 +263,29 @@ if (list) {
 /* ---------- 约稿下单 ---------- */
 var ORDER_SERVICES = SITE.orderServices || [
   {
-    name: '约拍 / 陪拍 / 外景正片', price: 120, priceText: '120', priceSuffix: 'r/h',
-    unit: '小时', min: 2, depositRate: 0.3, tag: '2 小时起拍 · 定金 30%',
-    notes: ['2 小时起拍, 定金为全款 30%', '跑单、迟到超 30 分钟不退', '10 公里以内免交通费用, 超出需另付', '返图时间在 7 天以内']
+    name: '约拍 / 棚拍 / 外景正片 · 六图', price: 168, priceText: '168', priceSuffix: '元 / 六图',
+    unit: '套', min: 1, fixedQty: true, depositRate: 0.3, tag: '6 张成片 · 拍摄 2–3 小时',
+    notes: ['六图套餐 168 元，拍摄 2–3 小时，定金 30%', '跑单、迟到超过 30 分钟，定金不退', '10 公里以内免交通费用，超出需支付交通费用', '14 天内返图，包含调色和画面小瑕疵修整，随机掉落特效']
   },
   {
-    name: '漫展场照', price: 20, priceText: '20', priceSuffix: 'r/张',
+    name: '约拍 / 棚拍 / 外景正片 · 九图', price: 198, priceText: '198', priceSuffix: '元 / 九图',
+    unit: '套', min: 1, fixedQty: true, depositRate: 0.3, tag: '9 张成片 · 拍摄 2–3 小时',
+    notes: ['九图套餐 198 元，拍摄 2–3 小时，定金 30%', '跑单、迟到超过 30 分钟，定金不退', '10 公里以内免交通费用，超出需支付交通费用', '14 天内返图，包含调色和画面小瑕疵修整，随机掉落特效']
+  },
+  {
+    name: '漫展场照', price: 20, priceText: '20', priceSuffix: '元 / 张',
     unit: '张', min: 4, depositRate: 0.3, tag: '四张起拍 · 定金 30%',
-    notes: ['四张起拍, 定金为全款 30%', '跑单、迟到超 30 分钟不退', '可提供动作指导, 需自备动作', '后期只做调色、轻微磨皮 · 返图 14 天内']
+    notes: ['四张起拍，20 元 / 张，定金为总额 30%', '跑单、迟到超过 30 分钟，定金不退', '可提供动作指导，但需自备动作', '后期仅调色和去除画面小瑕疵，14 天内返图']
   },
   {
-    name: '半合成场照', price: 50, priceText: '50', priceSuffix: 'r/张',
-    unit: '张', min: 1, depositRate: 0.3, tag: '定金 30% · 指定特效额外收费',
-    notes: ['定金为全款 30%', '指定特效额外收费']
+    name: 'Cos 半合成修图', price: 40, priceText: '40', priceSuffix: '元 / 张',
+    unit: '张', min: 1, depositRate: 0.3, tag: '原图加特效 · AI 辅修',
+    notes: ['只在原图上加特效，40 元 / 张', '使用 AI 辅修，介意请勿下单', '修图交付时间沟通确认']
   },
   {
-    name: '全合成场照', price: 100, priceText: '100', priceSuffix: 'r/张',
-    unit: '张', min: 1, depositRate: 0.3, tag: '定金 30% · 指定特效额外收费',
-    notes: ['定金为全款 30%', '指定特效额外收费']
+    name: 'Cos 全合成修图', price: 70, priceText: '70', priceSuffix: '元 / 张',
+    unit: '张', min: 1, depositRate: 0.3, tag: '换背景 + 加特效',
+    notes: ['更换背景并添加特效，70 元 / 张', '指定特效额外收费，具体费用沟通确认', '修图交付时间沟通确认']
   }
 ];
 var ORDER_DEADLINES = SITE.orderDeadlines || ['尽快安排', '一周内', '两周内', '本月内', '时间待定'];
@@ -341,8 +350,11 @@ if (ofForm) {
   function syncServiceUI() {
     var svc = ORDER_SERVICES[currentServiceIndex()] || ORDER_SERVICES[0] || {};
     var min = svc.min || 1;
-    if (ofQtyLabel) ofQtyLabel.textContent = (svc.unit === '小时') ? '时长（小时）' : '张数';
+    if (ofQtyLabel) ofQtyLabel.textContent = svc.fixedQty ? '套餐数量（每次预约一套）' : '张数';
     ofQty.min = min;
+    ofQty.disabled = !!svc.fixedQty;
+    ofQty.value = min;
+    $('#of-service-notes').textContent = (svc.notes || []).join('；');
     if ((parseInt(ofQty.value, 10) || 0) < min) ofQty.value = min;
   }
 
@@ -359,7 +371,7 @@ if (ofForm) {
     var price = svc.price || 0;
     var sub = price * qty;
     var rate = (typeof svc.depositRate === 'number') ? svc.depositRate : 0;
-    var deposit = Math.round(sub * rate);
+    var deposit = Math.round(sub * rate * 100) / 100;
     return {
       service: svc.name || '',
       unit: svc.unit || '张',
@@ -367,7 +379,9 @@ if (ofForm) {
       min: min,
       depositRate: rate,
       deposit: deposit,
-      balance: sub - deposit,
+      balance: Math.round((sub - deposit) * 100) / 100,
+      notes: (svc.notes || []).join('；'),
+      location: ($('#of-location').value || '').trim(),
       qty: qty,
       sub: sub,
       deadline: ofDeadline.value || ORDER_DEADLINES[0],
@@ -383,10 +397,13 @@ if (ofForm) {
       '服务：' + d.service,
       '数量：' + d.qty + ' ' + d.unit,
       '单价：' + d.priceText,
-      '小计：' + d.sub + 'r',
-      '定金：' + d.deposit + 'r (全款 ' + Math.round(d.depositRate * 100) + '%, 需预付)',
-      '尾款：' + d.balance + 'r',
+      '基础服务小计：' + d.sub + ' 元',
+      '定金：' + d.deposit + ' 元（总额 ' + Math.round(d.depositRate * 100) + '%，需预付）',
+      '尾款：' + d.balance + ' 元',
       '期望档期：' + d.deadline,
+      '地点 / 漫展名称：' + (d.location || '待沟通'),
+      '服务说明：' + d.notes,
+      '费用说明：以上为基础服务费；交通费、全合成指定特效费用另行确认。',
       '画面需求：' + (d.brief || '(未填写)'),
       '称呼：' + (d.name || '(未填写)'),
       '联系方式：' + (d.contact || '(未填写)'),
@@ -403,14 +420,16 @@ if (ofForm) {
       row('服务', d.service) +
       row('数量', d.qty + ' ' + d.unit) +
       row('单价', d.priceText) +
-      row('小计', d.sub + 'r') +
-      row('定金', d.deposit + 'r（' + Math.round(d.depositRate * 100) + '%, 需预付）') +
-      row('尾款', d.balance + 'r') +
+      row('基础服务小计', d.sub + ' 元') +
+      row('定金', d.deposit + ' 元（总额 ' + Math.round(d.depositRate * 100) + '%，需预付）') +
+      row('尾款', d.balance + ' 元') +
       row('期望档期', d.deadline) +
+      row('地点 / 漫展', d.location || '待沟通') +
       row('画面需求', d.brief || '待填写') +
       row('称呼', d.name || '待填写') +
       row('联系方式', d.contact || '待填写') +
-      '<div class="oc-total"><span>合计</span><b>' + d.sub + '<i>r</i></b></div>';
+      '<div class="oc-total"><span>基础服务合计</span><b>' + d.sub + '<i>元</i></b></div>' +
+      '<p class="oc-hint">交通费、全合成指定特效费用另行确认。生成订单不会自动提交或扣款，请发送给摄影师确认。</p>';
     if (generated) refreshActions();
   }
   function refreshActions() {
@@ -420,7 +439,7 @@ if (ofForm) {
       if (ORDER_EMAIL) {
         ofMail.hidden = false;
         ofMail.onclick = function(){
-          var subject = '约稿订单 · ' + d.service + ' · ' + d.qty + ' 张';
+          var subject = '约稿订单 · ' + d.service + ' · ' + d.qty + ' ' + d.unit;
           window.location.href = 'mailto:' + encodeURIComponent(ORDER_EMAIL) +
             '?subject=' + encodeURIComponent(subject) +
             '&body=' + encodeURIComponent(text);
@@ -457,6 +476,8 @@ if (ofForm) {
 
   ofServicesEl.addEventListener('change', function(e){
     if (!e.target || e.target.name !== 'of-service') return;
+    generated = false; ocActions.hidden = true; ofMsg.textContent = '';
+    $('#of-agree').checked = false;
     $all('.of-service', ofServicesEl).forEach(function(el){
       el.classList.toggle('is-on', $('input', el).checked);
     });
@@ -466,6 +487,7 @@ if (ofForm) {
   ['input', 'change'].forEach(function(evt){
     ofForm.addEventListener(evt, function(e){
       if (e.target && e.target.name === 'of-service') return;
+      generated = false; ocActions.hidden = true; ofMsg.textContent = '';
       renderOrder();
     });
   });
@@ -473,6 +495,16 @@ if (ofForm) {
 
   ofForm.addEventListener('submit', function(e){
     e.preventDefault();
+    generated = false; ocActions.hidden = true;
+    var rawQty = Number(ofQty.value);
+    if (!ofQty.disabled && (!Number.isInteger(rawQty) || rawQty < Number(ofQty.min) || rawQty > 999)) {
+      ofMsg.textContent = '请填写 ' + ofQty.min + ' 至 999 之间的整数张数。';
+      ofQty.focus(); return;
+    }
+    if (!$('#of-agree').checked) {
+      ofMsg.textContent = '请先阅读并勾选当前服务说明。';
+      $('#of-agree').focus(); return;
+    }
     var d = orderData();
     if (!d.name || !d.contact) {
       ofMsg.textContent = '请先填写「称呼」和「联系方式」, 方便我回复你。';
@@ -481,7 +513,7 @@ if (ofForm) {
       (d.name ? ofContact : ofName).focus();
       return;
     }
-    var depositTxt = d.deposit ? '（定金 ' + d.deposit + 'r 需预付）' : '';
+    var depositTxt = d.deposit ? '（定金 ' + d.deposit + ' 元需预付）' : '';
     if (!d.brief) {
       ofMsg.textContent = '订单已生成' + depositTxt + ', 未填画面需求也可以直接发送。';
     } else {

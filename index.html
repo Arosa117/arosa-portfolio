@@ -7,9 +7,13 @@
   <meta name="description" content="Arosa · 自由摄影师作品集 — 风格灵活多变的人像 / 概念 / 合成 / 后期影像">
   <title>Arosa · Photographer Portfolio</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 fill=%22%230b0b0b%22/%3E%3Ctext x=%2232%22 y=%2244%22 font-size=%2236%22 text-anchor=%22middle%22 fill=%22%23fff%22 font-family=%22Georgia,serif%22%3EA%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=20261106-9">
 </head>
-<body>
+<body class="is-opening">
+
+<div class="ghost-fibers-background" aria-hidden="true">
+  <canvas class="ghost-fibers-canvas" id="ghost-fibers"></canvas>
+</div>
 
 <!-- ============================================================
      站点配置: 修改下面的 SITE_CONFIG 即可更换名字 / 文案 / 联系方式
@@ -30,7 +34,7 @@ window.SITE_CONFIG = {
   // --- 联系方式(不填的项不会显示) ---
   email: '3112811410@qq.com',
   qq: '3112811410',                    // QQ
-  wechat: '',
+  wechat: 'Dief0ryou2k',
   phone: '',
   xiaohongshu: '',
   zcool: '',
@@ -42,10 +46,25 @@ window.SITE_CONFIG = {
 };
 </script>
 
+<!-- ======================= Opening ======================= -->
+<div class="opening" id="opening" aria-hidden="true">
+  <div class="opening-panel opening-panel-a"></div>
+  <div class="opening-panel opening-panel-b"></div>
+  <div class="opening-center">
+    <p class="opening-index">AROSA / VISUAL ARCHIVE</p>
+    <p class="opening-cycle"><span>FRAME</span><span>LIGHT</span><span>IMAGINATION</span></p>
+    <div class="opening-word"><span>AROSA</span></div>
+    <div class="opening-progress"><i></i></div>
+    <p class="opening-status"><span>PHOTOGRAPHY</span><span>2025 — 2026</span></p>
+  </div>
+  <div class="opening-count"><span>000</span></div>
+</div>
+
 <!-- ======================= 顶部导航 ======================= -->
 <header class="site-nav">
   <div class="nav-inner">
     <a class="brand" href="#home">
+      <span class="brand-mark"><i>A</i></span>
       <span class="zh">Arosa</span>
       <span class="en">PHOTOGRAPHER</span>
     </a>
@@ -61,19 +80,36 @@ window.SITE_CONFIG = {
 </header>
 
 <main>
-  <!-- ======================= 首页(极简文字排版) ======================= -->
+  <!-- ======================= 首页 / 视频首屏 ======================= -->
   <section class="hero" id="home">
+    <div class="hero-media" aria-hidden="true">
+      <video class="hero-video is-active" muted playsinline preload="none" data-src="assets/media/hero-film.webm"></video>
+      <video class="hero-video" muted playsinline preload="none" data-src="assets/media/hero-dumpling.webm"></video>
+      <div class="hero-shade"></div>
+      <div class="hero-grain"></div>
+    </div>
     <div class="hero-inner">
-      <p class="kicker eyebrow reveal"><span class="t">PHOTOGRAPHER · 自由摄影师</span></p>
-      <h1 class="reveal d1"><span class="l1">Arosa</span><span class="l2 thin"></span></h1>
-      <p class="sub reveal d2">我是 Arosa, 一名自由摄影师。人像、概念、合成、后期——不拘一格, 只为把脑海里的画面, 变成值得别人去看见的作品。</p>
-      <p class="hero-tags reveal d2">人像摄影 / 概念合成 / 商业拍摄 / 后期精修</p>
-      <div class="stats reveal d3">
-        <div class="stat"><b><span id="work-count">0</span></b><span>幅精选作品</span></div>
-        <div class="stat"><b><span id="range-years">—</span></b><span>创作时间跨度</span></div>
-        <div class="stat"><b>不设限</b><span>拍摄风格</span></div>
+      <div class="hero-topline">
+        <p class="hero-location">CHINA · AVAILABLE FOR COMMISSION</p>
+        <p class="hero-year">PORTFOLIO / 2026</p>
+      </div>
+      <div class="hero-title" aria-label="Arosa">
+        <div class="hero-title-mask"><span class="hero-title-line">AROSA</span></div>
+      </div>
+      <div class="hero-bottom">
+        <div class="hero-intro">
+          <p class="hero-intro-label">INDEPENDENT PHOTOGRAPHER</p>
+          <p class="hero-roleline">A <span id="hero-role">PORTRAIT MAKER</span> IN MOTION.</p>
+          <p class="sub">我是 Arosa，一名自由摄影师。用镜头与后期，把人物、氛围和想象压进同一帧画面。</p>
+        </div>
+        <div class="hero-data">
+          <div><b><span id="work-count">0</span></b><span>SELECTED WORKS</span></div>
+          <div><b><span id="range-years">—</span></b><span>VISUAL ARCHIVE</span></div>
+          <a href="mailto:3112811410@qq.com"><b>OPEN</b><span>FOR COMMISSION ↗</span></a>
+        </div>
       </div>
     </div>
+    <a class="hero-scroll" href="#works"><span>SCROLL TO EXPLORE</span><i></i></a>
   </section>
 
   <!-- ======================= 作品集 ======================= -->
@@ -86,6 +122,10 @@ window.SITE_CONFIG = {
         </div>
         <p class="note">共 <span class="work-total">0</span> 幅 · 点击任意作品查看大图<br>网页展示为优化版, 原图保存在本地</p>
       </header>
+      <div class="works-statement motion-copy">
+        <p>COMPOSITE / LOCATION / PORTRAIT</p>
+        <h3>让现实成为素材，<br>让想象决定画面。</h3>
+      </div>
       <div class="gallery" id="gallery"></div>
     </div>
   </section>
@@ -93,20 +133,44 @@ window.SITE_CONFIG = {
   <!-- ======================= 关于 ======================= -->
   <section class="section" id="about">
     <div class="wrap">
-      <div class="about-grid">
-        <div class="about-left">
-          <div class="sticky">
-            <p class="kicker reveal">ABOUT</p>
-            <div class="about-quote reveal d1">“<span class="mark">总有一天会燃烧殆尽</span>。”</div>
-            <p class="about-role" style="color:#9a9a95;letter-spacing:.3em;font-size:12px;margin-top:20px"></p>
+      <header class="about-intro">
+        <p class="kicker motion-kicker">ABOUT / PROFILE</p>
+        <h2 class="motion-heading">镜头之后，<br>仍然是创作。</h2>
+      </header>
+      <div class="about-editorial">
+        <figure class="about-portrait motion-image">
+          <div class="about-portrait-clip"><img src="assets/images/arosa-art-01.jpg" alt="Arosa 暗调火光艺术照" loading="lazy"></div>
+          <figcaption><span>AROSA</span><span>INDEPENDENT PHOTOGRAPHER</span></figcaption>
+        </figure>
+        <div class="about-copy">
+          <div class="about-summary">
+            <p class="about-lead motion-copy">我不太愿意被单一风格定义。摄影对我而言，不只是记录现实，而是重新组织光线、人物与想象。</p>
+            <p class="motion-copy">从外景人像到概念合成，从现场拍摄到后期精修，我会参与画面的完整过程。偏爱电影感的光影，也享受把一个模糊念头，一点点推成可以被看见的作品。</p>
           </div>
-        </div>
-        <div class="about-body">
-          <!-- 下面两段是示例文案, 请替换成你自己的介绍 -->
-          <p class="reveal">你好, 我是 <b class="about-name-inline">Arosa</b>。一名自由摄影师, 也是一个不太愿意被单一风格定义的人——摄影的乐趣, 正在于它的「灵活」：可以是一张干净利落的商业人像, 也可以是天马行空的概念合成。</p>
-          <p class="reveal d1">我偏爱有电影感的光影, 也享受在后期里把画面一点点推向极致。每一次按下快门, 都是在尝试把脑海里的想象变成现实。</p>
-          <div class="services reveal d2">
-            <span>人像摄影</span><span>概念合成</span><span>商业拍摄</span><span>后期精修</span><span>色彩调校</span>
+          <div class="about-philosophy" aria-label="Arosa 的摄影与人生观">
+            <div class="philosophy-part motion-rule">
+              <span>01 / THE END</span>
+              <p>每个人最终的结局都一样<br>从無中到有，又从有中到無<br>就像燃烧的火一般<br>最后只剩下慢慢变冷的余烬<br>所以这一切都是 <i>Not meaningful</i>，对么？</p>
+            </div>
+            <div class="philosophy-part motion-rule">
+              <span>02 / THE LIGHT</span>
+              <p><strong>不对。</strong></p>
+              <p>火虽然终会有燃烧殆尽的那天<br>但是在燃烧中散发的光和热<br>以及那片残余的灰烬<br>都是意义存在的本身</p>
+            </div>
+            <div class="philosophy-part motion-rule">
+              <span>03 / THE VIEW</span>
+              <p>这也是我对摄影的看法<br>不只是对摄影<br>更是对人生的看法，对世界的看法</p>
+            </div>
+            <div class="philosophy-part philosophy-proof motion-rule">
+              <span>04 / THE PROOF</span>
+              <p>我希望我的作品<br>能为我在这个世界上留下<br>我曾经存在过的证明</p>
+            </div>
+          </div>
+          <div class="about-facts">
+            <div class="fact motion-rule"><span>01 / FOCUS</span><strong>人像与概念影像</strong></div>
+            <div class="fact motion-rule"><span>02 / WORKFLOW</span><strong>拍摄 · 调色 · 合成 · 精修</strong></div>
+            <div class="fact motion-rule"><span>03 / ARCHIVE</span><strong><span class="work-total">0</span> 幅精选作品</strong></div>
+            <div class="fact motion-rule"><span>04 / CONTACT</span><strong>3112811410@qq.com</strong></div>
           </div>
         </div>
       </div>
@@ -119,7 +183,7 @@ window.SITE_CONFIG = {
       <header class="section-head reveal">
         <div>
           <p class="kicker">ORDER / 约稿</p>
-          <h2>点单下单</h2>
+          <h2>预约与修图下单</h2>
         </div>
         <p class="note">价格透明 · 选好需求生成订单<br>发我确认档期与定金</p>
       </header>
@@ -132,6 +196,7 @@ window.SITE_CONFIG = {
           <fieldset class="of-block">
             <legend class="of-label">01 / 选择服务</legend>
             <div class="of-services" id="of-services"></div>
+            <p class="oc-hint" id="of-service-notes" aria-live="polite"></p>
           </fieldset>
 
           <fieldset class="of-block">
@@ -139,13 +204,18 @@ window.SITE_CONFIG = {
             <div class="of-row">
               <label class="of-field">
                 <span id="of-qty-label">数量</span>
-                <input type="number" id="of-qty" min="1" max="999" step="1" value="2" inputmode="numeric">
+                <input type="number" id="of-qty" min="1" max="999" step="1" value="1" inputmode="numeric">
               </label>
               <label class="of-field">
                 <span>期望档期</span>
                 <select id="of-deadline"></select>
               </label>
             </div>
+            <label class="of-field of-location">
+              <span>拍摄地点 / 漫展名称（选填）</span>
+              <input type="text" id="of-location" placeholder="填写城市、场地或漫展；仅修图可留空">
+            </label>
+            <p class="oc-hint">期望档期需沟通确认；拍摄服务 14 天内返图，修图交付时间另议。定金沿用本站总额 30% 的规则，最终金额确认后再支付。</p>
           </fieldset>
 
           <fieldset class="of-block">
@@ -170,6 +240,7 @@ window.SITE_CONFIG = {
             </div>
           </fieldset>
 
+          <label class="of-agree"><input type="checkbox" id="of-agree"> <span>我已阅读当前服务说明、费用与定金规则；选择半合成修图时，知悉并接受 AI 辅修。</span></label>
           <div class="of-actions">
             <button type="submit" class="btn btn-primary" id="of-submit">生成订单</button>
             <button type="reset" class="btn btn-ghost" id="of-reset">清空重填</button>
@@ -195,11 +266,13 @@ window.SITE_CONFIG = {
 
   <!-- ======================= 联系 ======================= -->
   <section class="section" id="contact">
+    <div class="contact-backdrop" aria-hidden="true"></div>
+    <div class="contact-marquee" aria-hidden="true"><div>CREATE THE UNSEEN · CREATE THE UNSEEN · CREATE THE UNSEEN · CREATE THE UNSEEN · </div></div>
     <div class="wrap">
       <div class="contact-grid">
         <div class="contact-head reveal">
           <p class="kicker">CONTACT</p>
-          <h2>一起拍点<br>不一样的</h2>
+          <h2>一起创造<br><i>未被看见的</i></h2>
           <p>无论你想拍一组干净的人像, 还是想完成一张天马行空的合成, 都可以从这里找到我。</p>
         </div>
         <div class="reveal d1">
@@ -250,7 +323,14 @@ window.SITE_CONFIG = {
 </div>
 
 <noscript><p style="padding:120px 20px;text-align:center;color:#555">本站需要启用 JavaScript 才能浏览作品。</p></noscript>
-<script src="assets/js/works-data.js"></script>
+<script src="assets/vendor/gsap.min.js"></script>
+<script src="assets/vendor/ScrollTrigger.min.js"></script>
+<script src="assets/js/ghost-fibers.js?v=20261106-3"></script>
+<script src="assets/js/works-data.js?v=20261106-10"></script>
+<script src="assets/js/masonry-gallery.js?v=20261106-5"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/specular-buttons.js"></script>
+<script src="assets/js/stroke-text.js?v=20261106-3"></script>
+<script src="assets/js/motion.js?v=20261106-8"></script>
 </body>
 </html>

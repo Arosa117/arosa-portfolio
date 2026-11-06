@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-15 15:41:33",
-  "count": 14,
+  "generatedAt": "2026-11-06 11:42:03",
+  "count": 20,
   "works": [
     {
       "ok": true,
@@ -110,6 +110,51 @@
     {
       "ok": true,
       "idx": 8,
+      "id": "4e44a7",
+      "title": "合成8",
+      "file": "合成8.png",
+      "web": "works/web/4e44a7.webp",
+      "thumb": "works/thumb/4e44a7.webp",
+      "w": 5917,
+      "h": 2536,
+      "ratio": 2.333,
+      "orientation": "pano",
+      "mb": 19.6,
+      "mtime": "2026-11-02"
+    },
+    {
+      "ok": true,
+      "idx": 9,
+      "id": "449ead",
+      "title": "合成9",
+      "file": "合成9.png",
+      "web": "works/web/449ead.webp",
+      "thumb": "works/thumb/449ead.webp",
+      "w": 6596,
+      "h": 2827,
+      "ratio": 2.333,
+      "orientation": "pano",
+      "mb": 20.7,
+      "mtime": "2026-11-04"
+    },
+    {
+      "ok": true,
+      "idx": 10,
+      "id": "c65f11",
+      "title": "合成10",
+      "file": "合成10.jpg",
+      "web": "works/web/c65f11.webp",
+      "thumb": "works/thumb/c65f11.webp",
+      "w": 8719,
+      "h": 3648,
+      "ratio": 2.39,
+      "orientation": "pano",
+      "mb": 20.4,
+      "mtime": "2026-09-25"
+    },
+    {
+      "ok": true,
+      "idx": 11,
       "id": "532031",
       "title": "外景1",
       "file": "外景1.jpg",
@@ -124,7 +169,7 @@
     },
     {
       "ok": true,
-      "idx": 9,
+      "idx": 12,
       "id": "41de5e",
       "title": "外景2",
       "file": "外景2.jpg",
@@ -139,7 +184,7 @@
     },
     {
       "ok": true,
-      "idx": 10,
+      "idx": 13,
       "id": "5208ef",
       "title": "外景3",
       "file": "外景3.jpg",
@@ -154,7 +199,7 @@
     },
     {
       "ok": true,
-      "idx": 11,
+      "idx": 14,
       "id": "1d250a",
       "title": "外景4",
       "file": "外景4.jpg",
@@ -169,7 +214,7 @@
     },
     {
       "ok": true,
-      "idx": 12,
+      "idx": 15,
       "id": "2cdb26",
       "title": "外景5",
       "file": "外景5.jpg",
@@ -184,7 +229,7 @@
     },
     {
       "ok": true,
-      "idx": 13,
+      "idx": 16,
       "id": "3fef05",
       "title": "外景6",
       "file": "外景6.png",
@@ -199,7 +244,7 @@
     },
     {
       "ok": true,
-      "idx": 14,
+      "idx": 17,
       "id": "181ab9",
       "title": "外景7",
       "file": "外景7.jpg",
@@ -211,6 +256,51 @@
       "orientation": "pano",
       "mb": 37.4,
       "mtime": "2026-04-19"
+    },
+    {
+      "ok": true,
+      "idx": 18,
+      "id": "353f17",
+      "title": "外景8",
+      "file": "外景8.png",
+      "web": "works/web/353f17.webp",
+      "thumb": "works/thumb/353f17.webp",
+      "w": 8563,
+      "h": 3670,
+      "ratio": 2.333,
+      "orientation": "pano",
+      "mb": 32.8,
+      "mtime": "2026-11-04"
+    },
+    {
+      "ok": true,
+      "idx": 19,
+      "id": "61fda6",
+      "title": "外景9",
+      "file": "外景9.png",
+      "web": "works/web/61fda6.webp",
+      "thumb": "works/thumb/61fda6.webp",
+      "w": 7168,
+      "h": 3072,
+      "ratio": 2.333,
+      "orientation": "pano",
+      "mb": 24.6,
+      "mtime": "2026-11-05"
+    },
+    {
+      "ok": true,
+      "idx": 20,
+      "id": "f0d0ca",
+      "title": "外景10",
+      "file": "外景10.PNG",
+      "web": "works/web/f0d0ca.webp",
+      "thumb": "works/thumb/f0d0ca.webp",
+      "w": 5472,
+      "h": 3648,
+      "ratio": 1.5,
+      "orientation": "landscape",
+      "mb": 33.7,
+      "mtime": "2026-04-05"
     }
   ]
 }
